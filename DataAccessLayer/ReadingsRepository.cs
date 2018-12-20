@@ -20,8 +20,9 @@ namespace DataAccessLayer
             return Url;
         }
 
-        public List<Readings> GetReadings(string url)
+        public List<Readings> GetReadings(int mjernoMjestoId, int polutantId, string datumOd, string DatumDo)
         {
+            string url = GetUrl(mjernoMjestoId, polutantId, datumOd, DatumDo);
             List<Readings> _Readings = new List<Readings>();
             string Json = CallRestMethod(url);
 
@@ -30,6 +31,8 @@ namespace DataAccessLayer
             {
                 _Readings.Add(new Readings
                 {
+                    stationId = mjernoMjestoId,
+                    pollutantId = polutantId,
                     time = (float)item.GetValue("vrijeme"),
                     value = (float)item.GetValue("vrijednost")
                 });
@@ -49,6 +52,24 @@ namespace DataAccessLayer
             result = responseStream.ReadToEnd();
             webresponse.Close();
             return result;
+        }
+
+        public string connectionString = "Data Source=193.198.57.183; Initial Catalog = DotNet;User ID = vjezbe; Password = vjezbe";
+
+        public void pushToDataBase(List<Readings> readings)
+        {
+            for (int i = 0; i < readings.Count(); i++)
+            {
+                using (DbConnection connection = new SqlConnection(connectionString))
+                using (DbCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "INSERT INTO KvalitetaZraka_Mjeranja (MjernoMjesto, Polutant, Vrijednost, Vrijeme) VALUES (" + readings[i].stationId + "," + readings[i].pollutantId + "," + readings[i].value + "," + readings[i].time + ")";
+                    connection.Open();
+                    using (DbDataReader reader = command.ExecuteReader())
+                    {
+                    }
+                }
+            }
         }
     }
 }
