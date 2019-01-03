@@ -35,5 +35,13 @@ namespace DataAccessLayer
             }
             return Pollutants;
         }
+        public List<string> GetPollutantNames()
+        {
+            var names = new List<string>();
+            var pollutant = new List<Pollutant>();
+            pollutant = GetPollutant();
+            names = pollutant.Where(x => !string.IsNullOrEmpty(x.name)).Select(x => x.name).ToList();
+            return names;
+        }
     }
 }

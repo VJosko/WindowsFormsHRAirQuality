@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Entities
 {
-    public class Readings
+    public class ServisReadings
     {
         public int stationId { get; set; }
         public int pollutantId { get; set; }
-        public float value { get; set; }
-        public DateTime time { get; set; }
     }
 }

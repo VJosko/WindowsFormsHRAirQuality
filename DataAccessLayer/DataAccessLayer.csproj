@@ -46,10 +46,12 @@
   <ItemGroup>
     <Compile Include="Entities\Readings.cs" />
     <Compile Include="Entities\Pollutant.cs" />
+    <Compile Include="Entities\ServisReadings.cs" />
     <Compile Include="Entities\Station.cs" />
     <Compile Include="ReadingsRepository.cs" />
     <Compile Include="PollutantRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServisReadingsRepository.cs" />
     <Compile Include="StationRepository.cs" />
   </ItemGroup>
   <ItemGroup>

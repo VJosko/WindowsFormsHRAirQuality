@@ -35,5 +35,13 @@ namespace DataAccessLayer
             }
             return Stations;
         }
+        public List<string> GetStationNames()
+        {
+            var names = new List<string>();
+            var stations = new List<Station>();
+            stations = GetStations();
+            names = stations.Where(x => !string.IsNullOrEmpty(x.name)).Select(x => x.name).ToList();
+            return names;
+        }
     }
 }

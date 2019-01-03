@@ -29,11 +29,14 @@ namespace DataAccessLayer
             JArray json = JArray.Parse(Json);
             foreach (JObject item in json)
             {
+                float time = (float)item.GetValue("vrijeme");
+                DateTime datum = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+                datum = datum.AddMilliseconds(time);
                 _Readings.Add(new Readings
                 {
                     stationId = mjernoMjestoId,
                     pollutantId = polutantId,
-                    time = (float)item.GetValue("vrijeme"),
+                    time = datum,
                     value = (float)item.GetValue("vrijednost")
                 });
             }
@@ -70,57 +73,6 @@ namespace DataAccessLayer
                     }
                 }
             }
-        }
-
-        public List<Readings> GetReadingsServis()
-        {
-            var readings = new List<Readings>();
-            var mjesta = new List<Station>();
-            var polutanti = new List<Pollutant>();
-            StationRepository r1 = new StationRepository();
-            var _Station = r1.GetStations();
-            PollutantRepository p1 = new PollutantRepository();
-            var _Pollutant = p1.GetPollutant();
-            using (DbConnection connection = new SqlConnection(connectionString))
-            using (DbCommand command = connection.CreateCommand())
-            {
-                command.CommandText = "SELECT * FROM 'KvalitetaZraka_Mjesta-Polutanti'";
-                connection.Open();
-                using (DbDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var grad = "";
-                        for (int i = 0; i < _Station.Count(); i++)
-                        {
-                            if(_Station[i].id == (int)reader["GRAD_ID"])
-                            {
-                                grad = _Station[i].name;
-                            }
-                        }
-                        mjesta.Add(new Station()
-                        {
-                            id = (int)reader["GRAD_ID"],                          
-                            name = grad
-                        });
-                        var polutant = "";
-                        for (int i = 0; i < _Pollutant.Count(); i++)
-                        {
-                            if (_Pollutant[i].id == (int)reader["POLUTANT_ID"])
-                            {
-                                polutant = _Pollutant[i].name;
-                            }
-                        }
-                        polutanti.Add(new Pollutant()
-                        {
-                            id = (int)reader["POLUTANT_ID"],
-                            name = polutant
-                        });
-                    }
-                }
-            }
-
-            return readings;
         }
     }
 }
