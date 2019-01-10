@@ -39,7 +39,7 @@ namespace DataAccessLayer
             return Stations;
         }
 
-        public void GetReadings()
+        public List<Readings> GetReadings()
         {
             var _Readings = new List<Readings>();
             var stations = new List<ServisReadings>();
@@ -64,9 +64,7 @@ namespace DataAccessLayer
                     });
                 }
             }
-            Console.WriteLine(_Readings[0].time + "   " + _Readings[0].value + "   " + _Readings[0].stationId + "   " + _Readings[0].pollutantId);
-            Console.ReadKey();
-            pushToDataBase(_Readings);
+            return (_Readings);
         }
 
         public static string CallRestMethod(string url)

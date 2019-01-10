@@ -45,6 +45,7 @@
             this.comboBoxStations.Name = "comboBoxStations";
             this.comboBoxStations.Size = new System.Drawing.Size(256, 24);
             this.comboBoxStations.TabIndex = 0;
+            this.comboBoxStations.SelectedIndexChanged += new System.EventHandler(this.comboBoxStations_SelectedIndexChanged);
             // 
             // comboBoxPollutant
             // 
@@ -77,7 +78,7 @@
             this.dataGridViewReadings.Location = new System.Drawing.Point(457, 98);
             this.dataGridViewReadings.Name = "dataGridViewReadings";
             this.dataGridViewReadings.RowTemplate.Height = 24;
-            this.dataGridViewReadings.Size = new System.Drawing.Size(398, 452);
+            this.dataGridViewReadings.Size = new System.Drawing.Size(358, 452);
             this.dataGridViewReadings.TabIndex = 5;
             // 
             // search
