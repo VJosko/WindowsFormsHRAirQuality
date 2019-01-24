@@ -35,6 +35,39 @@ namespace DataAccessLayer
             }
             return Stations;
         }
+
+        public List<string> GetStationsBase()
+        {
+            var mjestaId = new List<int>();
+            using (DbConnection connection = new SqlConnection(connectionString))
+            using (DbCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM [KvalitetaZraka_Mjesta-Polutanti]";
+                connection.Open();
+                using (DbDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        mjestaId.Add((int)reader["GRAD_ID"]);
+                    }
+                }
+            }
+            mjestaId = mjestaId.Distinct().ToList();
+            List<Station> Stations = GetStations();
+            var stationsBase = new List<string>();
+            for(int i = 0; i < Stations.Count(); i++)
+            {
+                for(int j = 0; j < mjestaId.Count(); j++)
+                {
+                    if(Stations[i].id == mjestaId[j])
+                    {
+                        stationsBase.Add(Stations[i].name);
+                    }
+                }
+            }
+            return stationsBase;
+        }
+        
         public List<string> GetStationNames()
         {
             var names = new List<string>();

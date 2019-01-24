@@ -1,4 +1,4 @@
-﻿namespace AirPollutionService
+﻿namespace WindowsServiceAirQuality
 {
     partial class Service1
     {

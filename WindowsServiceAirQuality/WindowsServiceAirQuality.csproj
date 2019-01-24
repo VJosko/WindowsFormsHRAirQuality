@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9F8DBC52-A430-4F43-A98C-B770A7793A17}</ProjectGuid>
+    <ProjectGuid>{85687B8C-D5B3-4AA7-9A95-4E26FCE3CB89}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>AirPollutionService</RootNamespace>
-    <AssemblyName>AirPollutionService</AssemblyName>
+    <RootNamespace>WindowsServiceAirQuality</RootNamespace>
+    <AssemblyName>WindowsServiceAirQuality</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -83,10 +83,6 @@
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
       <Project>{3b7dfeff-c10e-48f2-a56a-a550d0eec2d3}</Project>
       <Name>DataAccessLayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PresentationLayer\PresentationLayer.csproj">
-      <Project>{e6f72d43-cbf2-48de-82f4-d130aeaa0688}</Project>
-      <Name>PresentationLayer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -29,18 +29,46 @@ namespace DataAccessLayer
             JArray json = JArray.Parse(Json);
             foreach (JObject item in json)
             {
-                float time = (float)item.GetValue("vrijeme");
                 DateTime datum = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-                datum = datum.AddMilliseconds(time);
                 _Readings.Add(new Readings
                 {
                     stationId = mjernoMjestoId,
                     pollutantId = polutantId,
-                    time = datum,
+                    time = (float)item.GetValue("vrijeme"),
                     value = (float)item.GetValue("vrijednost")
                 });
             }
             return _Readings;
+        }
+
+        public List<Readings> ReadReadings(DateTime from, DateTime To)
+        {
+            float fFrom = Convert.ToSingle(from.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds);
+            float fTo = Convert.ToSingle(To.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds);
+            var _readings = new List<Readings>();
+            using (DbConnection connection = new SqlConnection(connectionString))
+            using (DbCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM [KvalitetaZraka_Mjeranja]";
+                connection.Open();
+                using (DbDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (Convert.ToSingle(reader["Vrijeme"]) >= fFrom && Convert.ToSingle(reader["Vrijeme"]) < fTo)
+                        {
+                            _readings.Add(new Readings()
+                            {
+                                stationId = (int)reader["MjernoMjesto"],
+                                pollutantId = (int)reader["Polutant"],
+                                time = Convert.ToSingle(reader["Vrijeme"]),
+                                value = Convert.ToSingle(reader["Vrijednost"])
+                            });
+                        }
+                    }
+                }
+            }
+            return _readings;
         }
 
         public static string CallRestMethod(string url)
@@ -71,6 +99,19 @@ namespace DataAccessLayer
                     using (DbDataReader reader = command.ExecuteReader())
                     {
                     }
+                }
+            }
+        }
+
+        public void pushToDataBaseMjestoPolutant(int station, int pollutant)
+        {
+            using (DbConnection connection = new SqlConnection(connectionString))
+            using (DbCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "INSERT INTO [KvalitetaZraka_Mjesta-Polutanti] (GRAD_ID, POLUTANT_ID) VALUES (" + station + "," + pollutant + ")";
+                connection.Open();
+                using (DbDataReader reader = command.ExecuteReader())
+                {
                 }
             }
         }

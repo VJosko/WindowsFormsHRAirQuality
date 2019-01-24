@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "DataAcce
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationLayer", "PresentationLayer\PresentationLayer.csproj", "{E6F72D43-CBF2-48DE-82F4-D130AEAA0688}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirPollutionService", "AirPollutionService\AirPollutionService.csproj", "{9F8DBC52-A430-4F43-A98C-B770A7793A17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsServiceAirQuality", "WindowsServiceAirQuality\WindowsServiceAirQuality.csproj", "{85687B8C-D5B3-4AA7-9A95-4E26FCE3CB89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{E6F72D43-CBF2-48DE-82F4-D130AEAA0688}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6F72D43-CBF2-48DE-82F4-D130AEAA0688}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6F72D43-CBF2-48DE-82F4-D130AEAA0688}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9F8DBC52-A430-4F43-A98C-B770A7793A17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F8DBC52-A430-4F43-A98C-B770A7793A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9F8DBC52-A430-4F43-A98C-B770A7793A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9F8DBC52-A430-4F43-A98C-B770A7793A17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85687B8C-D5B3-4AA7-9A95-4E26FCE3CB89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85687B8C-D5B3-4AA7-9A95-4E26FCE3CB89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85687B8C-D5B3-4AA7-9A95-4E26FCE3CB89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85687B8C-D5B3-4AA7-9A95-4E26FCE3CB89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

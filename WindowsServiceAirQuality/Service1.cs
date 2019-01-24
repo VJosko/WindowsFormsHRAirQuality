@@ -7,10 +7,8 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
-using Quartz;
-using Quartz.Impl;
 
-namespace AirPollutionService
+namespace WindowsServiceAirQuality
 {
     public partial class Service1 : ServiceBase
     {

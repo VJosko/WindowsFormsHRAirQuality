@@ -1,28 +1,25 @@
-﻿using System;
+﻿using Quartz;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Quartz;
-using Quartz.Impl;
 using DataAccessLayer;
 using DataAccessLayer.Entities;
 
-namespace AirPollutionService
+namespace WindowsServiceAirQuality
 {
-    public class JobGetReadings: IJob
+    public class JobGetReadings : IJob
     {
         void IJob.Execute(IJobExecutionContext context)
         {
             SaveToDB();
         }
-
         void SaveToDB()
         {
             ServisReadingsRepository s1 = new ServisReadingsRepository();
-            var readings = s1.GetReadings();
-
-                s1.pushToDataBase(readings);
+            s1.GetReadings();
+            //System.IO.File.WriteAllText(@"D:\SerivceText.txt", "SERVIS");
         }
     }
 }

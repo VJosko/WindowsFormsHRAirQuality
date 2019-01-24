@@ -11,6 +11,6 @@ namespace DataAccessLayer.Entities
         public int stationId { get; set; }
         public int pollutantId { get; set; }
         public float value { get; set; }
-        public DateTime time { get; set; }
+        public float time { get; set; }
     }
 }

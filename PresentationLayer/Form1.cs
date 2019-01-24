@@ -29,8 +29,9 @@ namespace PresentationLayer
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            comboBoxStations.DataSource = _stationRepository.GetStationNames();
-            comboBoxPollutant.DataSource = _pollutantRepository.GetPollutantNames();
+            var s1 = _stationRepository.GetStationsBase();
+            comboBoxStations.DataSource = s1;
+            comboBoxPollutant.DataSource = _pollutantRepository.GetPollutantBase(s1[0]);
             dateTimePickerFrom.CustomFormat = "dd.MM.yyyy";
             dateTimePickerTo.CustomFormat = "dd.MM.yyyy";
         }
@@ -57,13 +58,46 @@ namespace PresentationLayer
                     pollutantId = pollutants[i].id;
                 }
             }
-            List<Readings> lReadings = _readingsRepository.GetReadings(stationId, pollutantId, dateTimePickerFrom.Text, dateTimePickerTo.Text);
-            dataGridViewReadings.DataSource = lReadings.Select(o => new
-            { Vrijednost = o.value, Vrijeme = o.time }).ToList();         
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            DateTime dateTimeFrom = dateTimePickerFrom.Value;
+            DateTime dateTimeTo = dateTimePickerTo.Value;
+            List<Readings> lReadings = _readingsRepository.ReadReadings(dateTimeFrom, dateTimeTo);
+            var _readings1 = new List<Readings>();
+            foreach (var station in stations)
+            {
+                if (station.name == comboBoxStations.Text)
+                {
+                    foreach (var pollutant in pollutants)
+                    {
+                        if (pollutant.name == comboBoxPollutant.Text)
+                        {
+                            foreach (var reading in lReadings)
+                            {
+                                if (reading.stationId == station.id && reading.pollutantId == pollutant.id)
+                                {
+                                    _readings1.Add(reading);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            dataGridViewReadings.DataSource = _readings1.Select(o => new
+            { Vrijednost = o.value, Vrijeme = (dateTime.AddMilliseconds(o.time)) }).ToList();
+
+            //graf
+            chart1.Series["Vrijednost"].Points.Clear();
+            foreach(var x in _readings1)
+            {
+                chart1.Series["Vrijednost"].Points.AddXY(x.time, x.value);
+            }
+            labelFrom.Text = dateTimeFrom.ToShortDateString();
+            labelTO.Text = dateTimeTo.ToShortDateString();
         }
 
         private void comboBoxStations_SelectedIndexChanged(object sender, EventArgs e)
         {
+            comboBoxPollutant.DataSource = _pollutantRepository.GetPollutantBase(comboBoxStations.Text);
             /*var lPollutants = _pollutantRepository.GetPollutant();
             var lStations = _stationRepository.GetStations();
             var lMjerenoId = new List<int>();
@@ -96,6 +130,17 @@ namespace PresentationLayer
                 }
             }
             comboBoxPollutant.DataSource = lMjereno;*/
+        }
+
+        private void chart1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDodaj_Click(object sender, EventArgs e)
+        {
+            FormDodaj m = new FormDodaj();
+            m.Show();
         }
     }
 }

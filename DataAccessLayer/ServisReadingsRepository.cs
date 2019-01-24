@@ -39,32 +39,32 @@ namespace DataAccessLayer
             return Stations;
         }
 
-        public List<Readings> GetReadings()
+        public void GetReadings()
         {
             var _Readings = new List<Readings>();
             var stations = new List<ServisReadings>();
             ServisReadingsRepository s1 = new ServisReadingsRepository();
             stations = s1.GetStations();
+            DateTime currentDate = DateTime.UtcNow.Date;
+            string sDate = currentDate.ToString("dd.MM.yyyy");
             for (int i = 0; i < stations.Count(); i++)
             {
-                string Url = "http://iszz.azo.hr/iskzl/rs/podatak/export/json?postaja=" + stations[i].stationId + "&polutant=" + stations[i].pollutantId + "&tipPodatka=0&vrijemeOd=03.01.2019&vrijemeDo=03.01.2019";
+                string Url = "http://iszz.azo.hr/iskzl/rs/podatak/export/json?postaja=" + stations[i].stationId + "&polutant=" + stations[i].pollutantId + "&tipPodatka=0&vrijemeOd=" + sDate + "&vrijemeDo=" + sDate;
                 string Json = CallRestMethod(Url);
                 JArray json = JArray.Parse(Json);
                 foreach (JObject item in json)
                 {
-                    float time = (float)item.GetValue("vrijeme");
                     DateTime datum = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-                    datum = datum.AddMilliseconds(time);
                     _Readings.Add(new Readings
                     {
                         stationId = stations[i].stationId,
                         pollutantId = stations[i].pollutantId,
-                        time = datum,
+                        time = (float)item.GetValue("vrijeme"),
                         value = (float)item.GetValue("vrijednost")
                     });
                 }
             }
-            return (_Readings);
+            pushToDataBase(_Readings);
         }
 
         public static string CallRestMethod(string url)
@@ -88,13 +88,25 @@ namespace DataAccessLayer
                 using (DbConnection connection = new SqlConnection(connectionString))
                 using (DbCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = "INSERT INTO KvalitetaZraka_Mjeranja (MjernoMjesto, Polutant, Vrijednost, Vrijeme) VALUES (" + readings[i].stationId + "," + readings[i].pollutantId + "," + readings[i].value + "," + readings[i].time + ")";
+                    string query = "INSERT INTO KvalitetaZraka_Mjeranja (MjernoMjesto, Polutant, Vrijednost, Vrijeme) VALUES (" + readings[i].stationId + "," + readings[i].pollutantId + "," + readings[i].value + "," + readings[i].time + ")";
+                    log(query);
+                    command.CommandText = query;
+                    //command.CommandText = "INSERT INTO KvalitetaZraka_Mjeranja (MjernoMjesto, Polutant, Vrijednost, Vrijeme) VALUES (" + readings[i].stationId + "," + readings[i].pollutantId + "," + readings[i].value + "," + readings[i].time + ")";
                     connection.Open();
                     using (DbDataReader reader = command.ExecuteReader())
                     {
                     }
                 }
             }
+        }
+
+        public void log(string query)
+        {
+            string path = @"log.txt";
+            StreamWriter oDatoteka = new StreamWriter(path, true);
+            oDatoteka.WriteLine(query);
+            oDatoteka.Flush();
+            oDatoteka.Close();
         }
     }
 }
